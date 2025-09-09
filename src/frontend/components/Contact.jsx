@@ -8,9 +8,15 @@ import {
     TextField,
     Button,
     Box,
-    MenuItem
+    MenuItem,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
 } from '@mui/material';
-import {Phone, Mail, MapPin} from 'lucide-react';
+import {Phone, Mail, MapPin, CheckCircle, AlertCircle} from 'lucide-react';
+import emailjs from '@emailjs/browser';
+import { emailConfig } from '../config/emailConfig.js';
 
 function Contact({darkMode}) {
     const [formData, setFormData] = useState({
@@ -20,15 +26,74 @@ function Contact({darkMode}) {
         service: "",
         message: "",
     });
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form submitted:", formData);
-        alert("Obrigado! Entraremos em contato em breve.");
+        setIsSubmitting(true);
+        setSubmitError(false);
+
+        try {
+            if (emailConfig.publicKey && emailConfig.publicKey !== 'your_public_key') {
+                emailjs.init(emailConfig.publicKey);
+            } else {
+                console.warn('[EmailJS] publicKey ausente ou placeholder. Substitua em src\\frontend\\config\\emailConfig.js');
+            }
+
+            const recipientEmail = (emailConfig.toEmail && emailConfig.toEmail.trim() !== '')
+                ? emailConfig.toEmail
+                : 'enzoshimadadaun@gmail.com';
+
+            const emailParams = {
+                from_name: formData.name,
+                from_email: formData.email,
+                phone: formData.phone,
+                service: formData.service || 'Não especificado',
+                message: formData.message || 'Sem mensagem adicional',
+                to_email: recipientEmail,
+                to: recipientEmail,
+                reply_to: formData.email || recipientEmail,
+                user_name: formData.name,
+                user_phone: formData.phone,
+                user_service: formData.service || 'Não especificado',
+                user_message: formData.message || 'Sem mensagem adicional'
+            };
+
+            await emailjs.send(
+                emailConfig.serviceId,
+                emailConfig.templateId,
+                emailParams,
+                emailConfig.publicKey
+            );
+
+            setDialogOpen(true);
+
+            setFormData({
+                name: "",
+                phone: "",
+                email: "",
+                service: "",
+                message: "",
+            });
+
+        } catch (error) {
+            console.error('Erro detalhado ao enviar email:', error);
+            setSubmitError(true);
+            setDialogOpen(true);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (field, value) => {
         setFormData((prev) => ({...prev, [field]: value}));
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+        setSubmitError(false);
     };
 
     return (
@@ -122,6 +187,25 @@ function Contact({darkMode}) {
                                                         borderColor: '#16a34a',
                                                     },
                                                 },
+                                                '& .MuiInputBase-input': {
+                                                    '&:-webkit-autofill': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                        transition: 'background-color 5000s ease-in-out 0s',
+                                                    },
+                                                    '&:-webkit-autofill:hover': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                    '&:-webkit-autofill:focus': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                    '&:-webkit-autofill:active': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                },
                                                 '& .MuiInputBase-input::placeholder': {
                                                     color: darkMode ? '#9ca3af' : '#6b7280',
                                                     opacity: 1,
@@ -151,7 +235,7 @@ function Contact({darkMode}) {
                                             onChange={(e) => handleChange("phone", e.target.value)}
                                             required
                                             fullWidth
-                                            placeholder="(11) 99999-9999"
+                                            placeholder="(16) 99999-9999"
                                             variant="outlined"
                                             sx={{
                                                 '& .MuiOutlinedInput-root': {
@@ -165,6 +249,25 @@ function Contact({darkMode}) {
                                                     },
                                                     '&.Mui-focused fieldset': {
                                                         borderColor: '#16a34a',
+                                                    },
+                                                },
+                                                '& .MuiInputBase-input': {
+                                                    '&:-webkit-autofill': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                        transition: 'background-color 5000s ease-in-out 0s',
+                                                    },
+                                                    '&:-webkit-autofill:hover': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                    '&:-webkit-autofill:focus': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                    '&:-webkit-autofill:active': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
                                                     },
                                                 },
                                                 '& .MuiInputBase-input::placeholder': {
@@ -210,6 +313,25 @@ function Contact({darkMode}) {
                                                     },
                                                     '&.Mui-focused fieldset': {
                                                         borderColor: '#16a34a',
+                                                    },
+                                                },
+                                                '& .MuiInputBase-input': {
+                                                    '&:-webkit-autofill': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                        transition: 'background-color 5000s ease-in-out 0s',
+                                                    },
+                                                    '&:-webkit-autofill:hover': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                    '&:-webkit-autofill:focus': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
+                                                    },
+                                                    '&:-webkit-autofill:active': {
+                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
+                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
                                                     },
                                                 },
                                                 '& .MuiInputBase-input::placeholder': {
@@ -322,6 +444,7 @@ function Contact({darkMode}) {
                                         type="submit"
                                         fullWidth
                                         variant="contained"
+                                        disabled={isSubmitting}
                                         sx={{
                                             bgcolor: '#16a34a',
                                             color: 'white',
@@ -332,10 +455,13 @@ function Contact({darkMode}) {
                                             '&:hover': {
                                                 bgcolor: '#15803d',
                                             },
+                                            '&:disabled': {
+                                                bgcolor: '#9ca3af',
+                                            },
                                             mt: 1
                                         }}
                                     >
-                                        Enviar Solicitação
+                                        {isSubmitting ? 'Enviando...' : 'Enviar Solicitação'}
                                     </Button>
                                 </Box>
                             </CardContent>
@@ -368,20 +494,25 @@ function Contact({darkMode}) {
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                                         <Phone size={20} style={{color: '#16a34a'}}/>
                                         <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                            (11) 99999-9999
+                                            (16) 99709-0444
                                         </Typography>
                                     </Box>
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                                         <Mail size={20} style={{color: '#16a34a'}}/>
                                         <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                            contato@edsonpragas.com.br
+                                            enzoshimadadaun@gmail.com
                                         </Typography>
                                     </Box>
-                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                                        <MapPin size={20} style={{color: '#16a34a'}}/>
-                                        <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                            Rua das Flores, 123 - São Paulo, SP
-                                        </Typography>
+                                    <Box sx={{display: 'flex', alignItems: 'flex-start', gap: 1.5}}>
+                                        <MapPin size={20} style={{color: '#16a34a', marginTop: '2px'}}/>
+                                        <Box>
+                                            <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
+                                                Av. Antonio Fernandes Pinto, 280
+                                            </Typography>
+                                            <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
+                                                Jaboticabal, SP
+                                            </Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Box>
@@ -399,24 +530,94 @@ function Contact({darkMode}) {
                                 </Typography>
                                 <Box
                                     sx={{
-                                        bgcolor: darkMode ? '#4b5563' : '#e5e7eb',
                                         height: 256,
                                         width: '100%',
                                         minWidth: '280px',
                                         borderRadius: 2,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
+                                        overflow: 'hidden',
+                                        border: darkMode ? '1px solid #4b5563' : '1px solid #e5e7eb',
                                     }}
                                 >
-                                    <Typography sx={{color: darkMode ? '#d1d5db' : '#6b7280'}}>
-                                        Mapa interativo aqui
-                                    </Typography>
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.9!2d-48.31!3d-21.25!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDE1JzAwLjAiUyA0OMKwMTgnMzYuMCJX!5e0!3m2!1spt-BR!2sbr!4v1639000000000!5m2!1spt-BR!2sbr"
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        allowFullScreen=""
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title="Localização da Edson Controle de Pragas - Jaboticabal, SP"
+                                    />
                                 </Box>
                             </Box>
                         </Box>
                     </Grid>
                 </Grid>
+
+                <Dialog
+                    open={dialogOpen}
+                    onClose={handleCloseDialog}
+                    PaperProps={{
+                        sx: {
+                            bgcolor: darkMode ? '#1f2937' : '#ffffff',
+                            border: darkMode ? '1px solid #374151' : '1px solid #e5e7eb',
+                            borderRadius: 2,
+                            minWidth: 320
+                        }
+                    }}
+                >
+                    <DialogTitle sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        color: darkMode ? '#ffffff' : '#111827',
+                        pb: 1
+                    }}>
+                        {submitError ? (
+                            <>
+                                <AlertCircle size={24} style={{color: '#dc2626'}}/>
+                                Erro no Envio
+                            </>
+                        ) : (
+                            <>
+                                <CheckCircle size={24} style={{color: '#16a34a'}}/>
+                                Email Enviado com Sucesso!
+                            </>
+                        )}
+                    </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{
+                            color: darkMode ? '#d1d5db' : '#374151',
+                            lineHeight: 1.6
+                        }}>
+                            {submitError ? (
+                                <>
+                                    Houve um problema ao enviar o email. Por favor, tente novamente ou entre em contato diretamente:
+                                    <br/><br/>
+                                    <strong>Telefone:</strong> (16) 99709-0444<br/>
+                                    <strong>Email:</strong> enzoshimadadaun@gmail.com
+                                </>
+                            ) : (
+                                'Sua solicitação foi enviada por email com sucesso! Entraremos em contato em breve para fornecer seu orçamento personalizado.'
+                            )}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions sx={{p: 3, pt: 1}}>
+                        <Button
+                            onClick={handleCloseDialog}
+                            variant="contained"
+                            sx={{
+                                bgcolor: submitError ? '#dc2626' : '#16a34a',
+                                color: 'white',
+                                '&:hover': {bgcolor: submitError ? '#b91c1c' : '#15803d'},
+                                textTransform: 'none',
+                                px: 3
+                            }}
+                        >
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Container>
         </Box>
     );

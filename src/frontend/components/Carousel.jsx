@@ -1,29 +1,32 @@
 import React, {useEffect} from 'react';
 import {Box, Container, Typography, IconButton} from '@mui/material';
 import {ChevronLeft, ChevronRight} from 'lucide-react';
-import bgTestImage from '../../assets/bgtest.jpg';
+import team from '../../assets/team.png';
+import eco from '../../assets/eco.png';
+import satisfaction from '../../assets/satisfaction.png';
+import approve from '../../assets/approve.png';
 
 function Carousel({currentSlide, setCurrentSlide, darkMode}) {
     const slides = [
         {
             title: "Equipe Qualificada e Certificada",
             description: "Profissionais treinados e certificados pelos órgãos competentes para garantir a máxima eficiência.",
-            image: bgTestImage,
+            image: team,
         },
         {
             title: "Produtos Eco-friendly e Seguros",
             description: "Utilizamos apenas produtos aprovados pela ANVISA, seguros para sua família e pets.",
-            image: bgTestImage,
+            image: eco,
         },
         {
             title: "Garantia de Satisfação",
             description: "Garantimos a eficácia do serviço ou realizamos nova aplicação sem custo adicional.",
-            image: bgTestImage,
+            image: satisfaction,
         },
         {
             title: "Depoimentos de Clientes",
             description: "Mais de 1000 clientes satisfeitos com avaliação 5 estrelas em nossos serviços.",
-            image: bgTestImage,
+            image: approve,
         },
     ];
 
@@ -68,6 +71,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                             overflow: 'hidden',
                             borderRadius: 2,
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            mx: {xs: 0, md: 6}
                         }}
                     >
                         <Box
@@ -91,7 +95,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                                             flexDirection: {xs: 'column', md: 'row'},
                                             alignItems: 'center',
                                             gap: 4,
-                                            p: 3,
+                                            p: {xs: 3, md: 4},
                                             bgcolor: darkMode ? '#1f2937' : '#f9fafb',
                                             minHeight: '300px',
                                         }}
@@ -101,7 +105,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                                                 flex: {xs: 'none', md: '1'},
                                                 width: {xs: '100%', md: '50%'},
                                                 textAlign: {xs: 'center', md: 'left'},
-                                                pr: {md: 2}
+                                                pr: {md: 3}
                                             }}
                                         >
                                             <Typography
@@ -133,7 +137,8 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                                                 flex: {xs: 'none', md: '1'},
                                                 width: {xs: '100%', md: '50%'},
                                                 display: 'flex',
-                                                justifyContent: {xs: 'center', md: 'flex-end'}
+                                                justifyContent: {xs: 'center', md: 'flex-end'},
+                                                pl: {md: 3}
                                             }}
                                         >
                                             <Box
@@ -142,7 +147,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                                                 alt={slide.title}
                                                 sx={{
                                                     width: '100%',
-                                                    maxWidth: '400px',
+                                                    maxWidth: '250px',
                                                     height: '200px',
                                                     objectFit: 'cover',
                                                     borderRadius: 2,
@@ -167,7 +172,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                         onClick={prevSlide}
                         sx={{
                             position: 'absolute',
-                            left: '1rem',
+                            left: {xs: '1rem', md: '0.5rem'},
                             top: '50%',
                             transform: 'translateY(-50%)',
                             bgcolor: darkMode ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
@@ -188,7 +193,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
                         onClick={nextSlide}
                         sx={{
                             position: 'absolute',
-                            right: '1rem',
+                            right: {xs: '1rem', md: '0.5rem'},
                             top: '50%',
                             transform: 'translateY(-50%)',
                             bgcolor: darkMode ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',

@@ -3,6 +3,11 @@ import {Box, Container, Grid, Typography} from '@mui/material';
 import {Bug} from 'lucide-react';
 
 function Footer() {
+    const handleWhatsAppClick = () => {
+        const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para controle de pragas.');
+        window.open(`https://wa.me/5516997090444?text=${message}`, '_blank');
+    };
+
     return (
         <Box
             component="footer"
@@ -27,7 +32,9 @@ function Footer() {
                         <Box sx={{display: 'flex', gap: 2}}>
                             <Typography
                                 component="a"
-                                href="#"
+                                href="https://www.facebook.com/edson.cesarpires?locale=pt_BR"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 sx={{
                                     color: '#d1d5db',
                                     textDecoration: 'none',
@@ -39,7 +46,9 @@ function Footer() {
                             </Typography>
                             <Typography
                                 component="a"
-                                href="#"
+                                href="https://www.instagram.com/edsoncpires?utm_source=ig_web_button_share_sheet&igsh=MXRoZmd5NDVoaWZsZw=="
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 sx={{
                                     color: '#d1d5db',
                                     textDecoration: 'none',
@@ -51,10 +60,11 @@ function Footer() {
                             </Typography>
                             <Typography
                                 component="a"
-                                href="#"
+                                onClick={handleWhatsAppClick}
                                 sx={{
                                     color: '#d1d5db',
                                     textDecoration: 'none',
+                                    cursor: 'pointer',
                                     '&:hover': {color: '#16a34a'},
                                     transition: 'color 0.3s'
                                 }}
@@ -80,10 +90,12 @@ function Footer() {
                             Contato
                         </Typography>
                         <Box sx={{'& > div': {mb: 1}}}>
-                            <Typography sx={{color: '#d1d5db'}}>Rua das Flores, 123</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>São Paulo, SP - CEP 01234-567</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>(11) 99999-9999</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>contato@edsonpragas.com.br</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>Av. Antonio Fernandes Pinto, 280</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>Bairro Xis - Jaboticabal, SP</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>CEP 14870-807</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>(16) 99709-0444</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>enzoshimadadaun@gmail.com</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>CNPJ: 59.224.809/0001-40</Typography>
                         </Box>
                     </Grid>
                 </Grid>

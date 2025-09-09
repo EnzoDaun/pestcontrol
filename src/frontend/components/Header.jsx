@@ -1,8 +1,13 @@
 import React from 'react';
 import {AppBar, Toolbar, Container, Box, Typography, Button} from '@mui/material';
-import {Bug, Phone, Moon, Sun} from 'lucide-react';
+import {Bug, Moon, Sun, MessageCircle} from 'lucide-react';
 
 function Header({darkMode, toggleTheme}) {
+    const handleWhatsAppClick = () => {
+        const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para controle de pragas.');
+        window.open(`https://wa.me/5516997090444?text=${message}`, '_blank');
+    };
+
     return (
         <AppBar
             position="fixed"
@@ -23,27 +28,37 @@ function Header({darkMode, toggleTheme}) {
                             sx={{
                                 fontWeight: 'bold',
                                 color: darkMode ? 'white' : 'black',
-                                fontSize: {xs: '1.1rem', sm: '1.25rem'}
+                                fontSize: {xs: '0.8rem', sm: '1.25rem'}
                             }}
                         >
                             Edson Controle de Pragas
                         </Typography>
                     </Box>
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: {xs: 1, sm: 2}}}>
                         <Button
-                            component="a"
-                            href="tel:+5511999999999"
+                            onClick={handleWhatsAppClick}
+                            variant="contained"
+                            size="small"
                             sx={{
-                                color: '#16a34a',
-                                display: {xs: 'none', sm: 'flex'},
+                                bgcolor: '#25d366',
+                                color: 'white',
+                                '&:hover': {bgcolor: '#128c7e'},
+                                textTransform: 'none',
+                                borderRadius: '20px',
+                                px: {xs: 0, sm: 2},
+                                fontSize: {xs: '0.5rem', sm: '0.875rem'},
+                                minWidth:{xs: '32px', sm: 'auto'},
+                                height: {xs: '32px', sm: 'auto'},
+                                display: 'flex',
                                 alignItems: 'center',
-                                gap: 0.5,
-                                '&:hover': {color: '#15803d'},
-                                textTransform: 'none'
+                                justifyContent: 'center',
+                                '& .MuiButton-startIcon': {
+                                    margin: {xs: 0, sm: '0 4px 0 0'}
+                                }
                             }}
-                            startIcon={<Phone size={16}/>}
+                            startIcon={<MessageCircle size={16}/>}
                         >
-                            (11) 99999-9999
+                            <Box sx={{display: {xs: 'none', sm: 'block'} }}>WhatsApp</Box>
                         </Button>
                         <Button
                             onClick={toggleTheme}

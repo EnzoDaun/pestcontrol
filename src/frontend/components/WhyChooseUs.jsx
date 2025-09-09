@@ -53,11 +53,10 @@ function WhyChooseUs({ darkMode }) {
           </Typography>
         </Box>
 
-        {/* Usando flexbox com direction column no mobile para forçar um item por linha */}
-        <Box 
+        <Box
           sx={{ 
             display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' }, // Column no mobile, row no desktop
+            flexDirection: { xs: 'column', md: 'row' },
             gap: { xs: 4, md: 4 },
             alignItems: 'center',
             justifyContent: 'center',
@@ -73,8 +72,8 @@ function WhyChooseUs({ darkMode }) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                flex: { xs: 'none', md: '1' }, // No flex no mobile, flex igual no desktop
-                width: { xs: '100%', md: 'auto' }, // Width 100% no mobile
+                flex: { xs: 'none', md: '1' },
+                width: { xs: '100%', md: 'auto' },
                 maxWidth: { xs: '400px', md: '320px' },
                 px: { xs: 4, md: 2 },
                 py: { xs: 4, md: 0 },

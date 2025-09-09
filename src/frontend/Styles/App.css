@@ -1,5 +1,3 @@
-/* App.css - Estilos baseados no globals.css do exemplo */
-
 html {
   scroll-behavior: smooth;
 }
@@ -47,7 +45,6 @@ body {
   background: #64748b;
 }
 
-/* Hero section */
 .hero-section {
   position: relative;
   height: 100vh;
@@ -71,7 +68,6 @@ body {
   background: rgba(0, 0, 0, 0.4);
 }
 
-/* Service cards hover effects */
 .service-card {
   transition: all 0.3s ease;
 }
@@ -80,7 +76,6 @@ body {
   transform: translateY(-4px);
 }
 
-/* Carousel styles - corrigidos */
 .carousel-container {
   position: relative;
   overflow: hidden;
@@ -166,12 +161,10 @@ body {
   background: #16a34a;
 }
 
-/* Dark mode carousel corrections */
 .dark .carousel-container {
   background: transparent;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: 0 0.75rem;
