@@ -72,7 +72,7 @@ export default function EdsonPestControl() {
                 <Services darkMode={darkMode}/>
                 <Carousel currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} darkMode={darkMode}/>
                 <WhyChooseUs darkMode={darkMode}/>
-                <Testimonials darkMode={darkMode}/>
+                {/*<Testimonials darkMode={darkMode}/>*/}
                 <Contact darkMode={darkMode}/>
                 <Footer darkMode={darkMode}/>
             </Box>

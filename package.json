@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "vite build --mode production",
+    "build:hostinger": "vite build && npm run copy-config",
+    "copy-config": "cp .htaccess dist/ && cp web.config dist/",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "vite preview --port 4173"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

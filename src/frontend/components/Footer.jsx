@@ -94,7 +94,7 @@ function Footer() {
                             <Typography sx={{color: '#d1d5db'}}>Bairro Xis - Jaboticabal, SP</Typography>
                             <Typography sx={{color: '#d1d5db'}}>CEP 14870-807</Typography>
                             <Typography sx={{color: '#d1d5db'}}>(16) 99709-0444</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>enzoshimadadaun@gmail.com</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>edsoncontroledepragas@gmail.com</Typography>
                             <Typography sx={{color: '#d1d5db'}}>CNPJ: 59.224.809/0001-40</Typography>
                         </Box>
                     </Grid>

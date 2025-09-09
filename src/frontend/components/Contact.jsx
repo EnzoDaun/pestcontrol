@@ -44,7 +44,7 @@ function Contact({darkMode}) {
 
             const recipientEmail = (emailConfig.toEmail && emailConfig.toEmail.trim() !== '')
                 ? emailConfig.toEmail
-                : 'enzoshimadadaun@gmail.com';
+                : 'edsoncontroledepragas@gmail.com';
 
             const emailParams = {
                 from_name: formData.name,
@@ -500,7 +500,7 @@ function Contact({darkMode}) {
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                                         <Mail size={20} style={{color: '#16a34a'}}/>
                                         <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                            enzoshimadadaun@gmail.com
+                                            edsoncontroledepragas@gmail.com
                                         </Typography>
                                     </Box>
                                     <Box sx={{display: 'flex', alignItems: 'flex-start', gap: 1.5}}>
@@ -595,7 +595,7 @@ function Contact({darkMode}) {
                                     Houve um problema ao enviar o email. Por favor, tente novamente ou entre em contato diretamente:
                                     <br/><br/>
                                     <strong>Telefone:</strong> (16) 99709-0444<br/>
-                                    <strong>Email:</strong> enzoshimadadaun@gmail.com
+                                    <strong>Email:</strong> edsoncontroledepragas@gmail.com
                                 </>
                             ) : (
                                 'Sua solicitação foi enviada por email com sucesso! Entraremos em contato em breve para fornecer seu orçamento personalizado.'
