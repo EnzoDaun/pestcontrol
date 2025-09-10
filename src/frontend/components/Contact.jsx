@@ -16,7 +16,20 @@ import {
 } from '@mui/material';
 import {Phone, Mail, MapPin, CheckCircle, AlertCircle} from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import { emailConfig } from '../config/emailConfig.js';
+import {emailConfig} from '../config/emailConfig.js';
+
+const sanitizeInput = (input) => {
+    if (typeof input !== 'string') return '';
+    return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/<[^>]*>/g, '').replace(/javascript:/gi, '').trim().substring(0, 1000);
+};
+
+const formatPhoneBrazil = (value) => {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length <= 2) return `(${digits}`;
+    if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+};
 
 function Contact({darkMode}) {
     const [formData, setFormData] = useState({
@@ -46,19 +59,27 @@ function Contact({darkMode}) {
                 ? emailConfig.toEmail
                 : 'edsoncontroledepragas@gmail.com';
 
+            const sanitizedData = {
+                name: sanitizeInput(formData.name),
+                email: sanitizeInput(formData.email),
+                phone: sanitizeInput(formData.phone),
+                service: sanitizeInput(formData.service),
+                message: sanitizeInput(formData.message)
+            };
+
             const emailParams = {
-                from_name: formData.name,
-                from_email: formData.email,
-                phone: formData.phone,
-                service: formData.service || 'Não especificado',
-                message: formData.message || 'Sem mensagem adicional',
+                from_name: sanitizedData.name,
+                from_email: sanitizedData.email,
+                phone: sanitizedData.phone,
+                service: sanitizedData.service || 'Não especificado',
+                message: sanitizedData.message || 'Sem mensagem adicional',
                 to_email: recipientEmail,
                 to: recipientEmail,
-                reply_to: formData.email || recipientEmail,
-                user_name: formData.name,
-                user_phone: formData.phone,
-                user_service: formData.service || 'Não especificado',
-                user_message: formData.message || 'Sem mensagem adicional'
+                reply_to: sanitizedData.email || recipientEmail,
+                user_name: sanitizedData.name,
+                user_phone: sanitizedData.phone,
+                user_service: sanitizedData.service || 'Não especificado',
+                user_message: sanitizedData.message || 'Sem mensagem adicional'
             };
 
             await emailjs.send(
@@ -88,7 +109,8 @@ function Contact({darkMode}) {
     };
 
     const handleChange = (field, value) => {
-        setFormData((prev) => ({...prev, [field]: value}));
+        const processedValue = field === 'phone' ? formatPhoneBrazil(value) : value;
+        setFormData((prev) => ({...prev, [field]: processedValue}));
     };
 
     const handleCloseDialog = () => {
@@ -129,15 +151,15 @@ function Contact({darkMode}) {
                     </Typography>
                 </Box>
 
-                <Grid container spacing={3} sx={{ width: '100%' }}>
+                <Grid container spacing={3} sx={{width: '100%'}}>
                     <Grid
                         item
                         xs={12}
                         lg={8}
                         sx={{
-                            width: { xs: '100%', lg: '62%' },
-                            maxWidth: { xs: '100%', lg: '62%' },
-                            flexBasis: { xs: '100%', lg: '62%' }
+                            width: {xs: '100%', lg: '62%'},
+                            maxWidth: {xs: '100%', lg: '62%'},
+                            flexBasis: {xs: '100%', lg: '62%'}
                         }}
                     >
                         <Card
@@ -147,7 +169,7 @@ function Contact({darkMode}) {
                                 width: '100%'
                             }}
                         >
-                            <CardContent sx={{p: 3}} >
+                            <CardContent sx={{p: 3}}>
                                 <Box component="form" onSubmit={handleSubmit}
                                      sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                                     <Box>
@@ -473,9 +495,9 @@ function Contact({darkMode}) {
                         xs={12}
                         lg={4}
                         sx={{
-                            width: { xs: '100%', lg: '34%' },
-                            maxWidth: { xs: '100%', lg: '34%' },
-                            flexBasis: { xs: '100%', lg: '34%' }
+                            width: {xs: '100%', lg: '34%'},
+                            maxWidth: {xs: '100%', lg: '34%'},
+                            flexBasis: {xs: '100%', lg: '34%'}
                         }}
                     >
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
@@ -542,7 +564,7 @@ function Contact({darkMode}) {
                                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.9!2d-48.31!3d-21.25!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDE1JzAwLjAiUyA0OMKwMTgnMzYuMCJX!5e0!3m2!1spt-BR!2sbr!4v1639000000000!5m2!1spt-BR!2sbr"
                                         width="100%"
                                         height="100%"
-                                        style={{ border: 0 }}
+                                        style={{border: 0}}
                                         allowFullScreen=""
                                         loading="lazy"
                                         referrerPolicy="no-referrer-when-downgrade"
@@ -592,7 +614,8 @@ function Contact({darkMode}) {
                         }}>
                             {submitError ? (
                                 <>
-                                    Houve um problema ao enviar o email. Por favor, tente novamente ou entre em contato diretamente:
+                                    Houve um problema ao enviar o email. Por favor, tente novamente ou entre em contato
+                                    diretamente:
                                     <br/><br/>
                                     <strong>Telefone:</strong> (16) 99709-0444<br/>
                                     <strong>Email:</strong> edsoncontroledepragas@gmail.com
