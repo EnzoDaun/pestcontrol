@@ -1,50 +1,39 @@
-# Configuração para aplicações React/Vite na Hostinger
 RewriteEngine On
 
-# Configurar MIME types corretos
 AddType application/javascript .js
 AddType application/javascript .mjs
 AddType text/css .css
 AddType application/json .json
 AddType image/svg+xml .svg
 
-# Headers de segurança aprimorados
 <IfModule mod_headers.c>
-    # Headers de segurança essenciais
     Header always set X-Content-Type-Options nosniff
     Header always set X-Frame-Options DENY
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 
-    # Content Security Policy básico (ajuste conforme necessário)
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.emailjs.com"
 
-    # Cache para assets estáticos
     <FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
         Header set Expires "1 year"
     </FilesMatch>
 
-    # Cache para HTML (mais curto para updates)
     <FilesMatch "\.html$">
         Header set Cache-Control "public, max-age=3600, must-revalidate"
     </FilesMatch>
 
-    # Remover headers que expõem informações do servidor
     Header unset Server
     Header unset X-Powered-By
 </IfModule>
 
-# Roteamento para SPA (Single Page Application)
-# Redireciona todas as rotas para index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/\.well-known/.*
 RewriteCond %{REQUEST_URI} !^/(api|admin)/.*
 RewriteRule . /index.html [L]
 
-# Configurações de compressão
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/html
@@ -58,26 +47,22 @@ RewriteRule . /index.html [L]
     AddOutputFilterByType DEFLATE application/json
 </IfModule>
 
-# Proteção contra hotlinking de imagens
 <IfModule mod_rewrite.c>
     RewriteCond %{HTTP_REFERER} !^$
     RewriteCond %{HTTP_REFERER} !^https://(www\.)?seudominio\.com [NC]
     RewriteRule \.(jpg|jpeg|png|gif|svg)$ - [F,L]
 </IfModule>
 
-# Impedir acesso a arquivos sensíveis
 <Files ~ "^\.">
     Order allow,deny
     Deny from all
 </Files>
 
-# Proteger arquivos de configuração e código fonte
 <FilesMatch "\.(env|git|svn|htpasswd|htaccess|ini|log|sh|inc|bak|config)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
 
-# Proteger contra ataques de força bruta (limitação básica)
 <IfModule mod_evasive24.c>
     DOSHashTableSize    2048
     DOSPageCount        10
@@ -87,13 +72,10 @@ RewriteRule . /index.html [L]
     DOSBlockingPeriod   600
 </IfModule>
 
-# Configurar index padrão
 DirectoryIndex index.html
 
-# Desabilitar listagem de diretórios
 Options -Indexes
 
-# Configurações SSL/HTTPS (se disponível)
 <IfModule mod_rewrite.c>
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
