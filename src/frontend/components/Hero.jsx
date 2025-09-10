@@ -1,9 +1,26 @@
 import React from 'react';
 import {Box, Container, Typography, Button} from '@mui/material';
 import bgTestImage from '../../assets/bgtest.jpg';
-import edsonLogo from '../../assets/edsoncontroledepragas.png';
+import edsonLogo from '../../assets/EDSONLOGO.png';
+import {getPrimaryButtonStyles} from '../utils/styles.js';
 
 function Hero({scrollToContact}) {
+    const buttonStyles = {
+        ...getPrimaryButtonStyles(),
+        px: 4,
+        py: 2,
+        fontSize: {xs: '1rem', md: '1.125rem'},
+        fontWeight: 'semibold',
+        borderRadius: '9999px',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+        '&:hover': {
+            ...getPrimaryButtonStyles().hover,
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(-1px)'
+        },
+        transition: 'all 0.3s ease'
+    };
+
     return (
         <Box
             component="section"
@@ -38,7 +55,6 @@ function Hero({scrollToContact}) {
                     gap: {xs: 3, md: 4},
                     py: {xs: 4, md: 0}
                 }}>
-                    {/* Coluna do texto - Esquerda (Desktop) / Topo (Mobile) */}
                     <Box sx={{
                         flex: {xs: 'none', md: '1'},
                         width: {xs: '100%', md: '50%'},
@@ -86,21 +102,8 @@ function Hero({scrollToContact}) {
                                 variant="contained"
                                 size="large"
                                 sx={{
-                                    bgcolor: '#16a34a',
-                                    color: 'white',
-                                    px: 4,
-                                    py: 2,
-                                    fontSize: {xs: '1rem', md: '1.125rem'},
-                                    fontWeight: 'semibold',
-                                    borderRadius: '9999px',
-                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                                    display: {xs: 'none', md: 'inline-flex'},
-                                    '&:hover': {
-                                        bgcolor: '#15803d',
-                                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                                        transform: 'translateY(-1px)'
-                                    },
-                                    transition: 'all 0.3s ease'
+                                    ...buttonStyles,
+                                    display: {xs: 'none', md: 'inline-flex'}
                                 }}
                             >
                                 Solicite um Orçamento
@@ -150,24 +153,12 @@ function Hero({scrollToContact}) {
                             variant="contained"
                             size="large"
                             sx={{
-                                bgcolor: '#16a34a',
-                                color: 'white',
-                                px: 4,
+                                ...buttonStyles,
                                 py: 1,
-                                fontSize: '1rem',
-                                fontWeight: 'semibold',
-                                borderRadius: '9999px',
-                                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                                 minWidth: '200px',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                '&:hover': {
-                                    bgcolor: '#15803d',
-                                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                                    transform: 'translateY(-1px)'
-                                },
-                                transition: 'all 0.3s ease'
+                                justifyContent: 'center'
                             }}
                         >
                             Solicitar orçamento

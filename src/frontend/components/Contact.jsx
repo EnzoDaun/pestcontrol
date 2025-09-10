@@ -17,29 +17,26 @@ import {
 import {Phone, Mail, MapPin, CheckCircle, AlertCircle} from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import {emailConfig} from '../config/emailConfig.js';
-
-const sanitizeInput = (input) => {
-    if (typeof input !== 'string') return '';
-    return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/<[^>]*>/g, '').replace(/javascript:/gi, '').trim().substring(0, 1000);
-};
-
-const formatPhoneBrazil = (value) => {
-    const digits = value.replace(/\D/g, '');
-    if (digits.length <= 2) return `(${digits}`;
-    if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-    if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
-    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
-};
+import { useForm, useDialog } from '../hooks/useForm.js';
+import { CONTACT_INFO, SERVICE_OPTIONS, MAP_CONFIG } from '../constants/data.js';
+import {
+    getFormFieldStyles,
+    getFormLabelStyles,
+    getPrimaryButtonStyles,
+    getSectionTitleStyles,
+    getSectionSubtitleStyles
+} from '../utils/styles.js';
 
 function Contact({darkMode}) {
-    const [formData, setFormData] = useState({
+    const { formData, handleChange, reset, getSanitizedData } = useForm({
         name: "",
         phone: "",
         email: "",
         service: "",
         message: "",
     });
-    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const { open: dialogOpen, openDialog, closeDialog } = useDialog();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(false);
 
@@ -57,15 +54,9 @@ function Contact({darkMode}) {
 
             const recipientEmail = (emailConfig.toEmail && emailConfig.toEmail.trim() !== '')
                 ? emailConfig.toEmail
-                : 'edsoncontroledepragas@gmail.com';
+                : CONTACT_INFO.email;
 
-            const sanitizedData = {
-                name: sanitizeInput(formData.name),
-                email: sanitizeInput(formData.email),
-                phone: sanitizeInput(formData.phone),
-                service: sanitizeInput(formData.service),
-                message: sanitizeInput(formData.message)
-            };
+            const sanitizedData = getSanitizedData();
 
             const emailParams = {
                 from_name: sanitizedData.name,
@@ -89,32 +80,20 @@ function Contact({darkMode}) {
                 emailConfig.publicKey
             );
 
-            setDialogOpen(true);
-
-            setFormData({
-                name: "",
-                phone: "",
-                email: "",
-                service: "",
-                message: "",
-            });
+            openDialog();
+            reset();
 
         } catch (error) {
             console.error('Erro detalhado ao enviar email:', error);
             setSubmitError(true);
-            setDialogOpen(true);
+            openDialog();
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    const handleChange = (field, value) => {
-        const processedValue = field === 'phone' ? formatPhoneBrazil(value) : value;
-        setFormData((prev) => ({...prev, [field]: processedValue}));
-    };
-
     const handleCloseDialog = () => {
-        setDialogOpen(false);
+        closeDialog();
         setSubmitError(false);
     };
 
@@ -129,24 +108,10 @@ function Contact({darkMode}) {
         >
             <Container>
                 <Box sx={{textAlign: 'center', mb: 8}}>
-                    <Typography
-                        variant="h2"
-                        sx={{
-                            fontWeight: 'bold',
-                            mb: 2,
-                            fontSize: {xs: '2rem', md: '2.5rem'},
-                            color: darkMode ? '#ffffff' : '#111827'
-                        }}
-                    >
+                    <Typography variant="h2" sx={getSectionTitleStyles(darkMode)}>
                         Entre em Contato
                     </Typography>
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            color: darkMode ? '#d1d5db' : '#6b7280',
-                            fontSize: {xs: '1rem', md: '1.125rem'}
-                        }}
-                    >
+                    <Typography variant="h6" sx={getSectionSubtitleStyles(darkMode)}>
                         Solicite seu orçamento gratuito e proteja seu ambiente hoje mesmo.
                     </Typography>
                 </Box>
@@ -173,17 +138,7 @@ function Contact({darkMode}) {
                                 <Box component="form" onSubmit={handleSubmit}
                                      sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                                     <Box>
-                                        <Typography
-                                            component="label"
-                                            htmlFor="name"
-                                            sx={{
-                                                display: 'block',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 'medium',
-                                                mb: 1,
-                                                color: darkMode ? '#ffffff' : '#111827'
-                                            }}
-                                        >
+                                        <Typography component="label" htmlFor="name" sx={getFormLabelStyles(darkMode)}>
                                             Nome *
                                         </Typography>
                                         <TextField
@@ -195,59 +150,12 @@ function Contact({darkMode}) {
                                             fullWidth
                                             placeholder="Seu nome completo"
                                             variant="outlined"
-                                            sx={{
-                                                '& .MuiOutlinedInput-root': {
-                                                    bgcolor: darkMode ? '#1f2937' : '#ffffff',
-                                                    color: darkMode ? '#ffffff' : '#111827',
-                                                    '& fieldset': {
-                                                        borderColor: darkMode ? '#4b5563' : '#d1d5db',
-                                                    },
-                                                    '&:hover fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                    '&.Mui-focused fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input': {
-                                                    '&:-webkit-autofill': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                        transition: 'background-color 5000s ease-in-out 0s',
-                                                    },
-                                                    '&:-webkit-autofill:hover': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                    '&:-webkit-autofill:focus': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                    '&:-webkit-autofill:active': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input::placeholder': {
-                                                    color: darkMode ? '#9ca3af' : '#6b7280',
-                                                    opacity: 1,
-                                                },
-                                            }}
+                                            sx={getFormFieldStyles(darkMode)}
                                         />
                                     </Box>
 
                                     <Box>
-                                        <Typography
-                                            component="label"
-                                            htmlFor="phone"
-                                            sx={{
-                                                display: 'block',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 'medium',
-                                                mb: 1,
-                                                color: darkMode ? '#ffffff' : '#111827'
-                                            }}
-                                        >
+                                        <Typography component="label" htmlFor="phone" sx={getFormLabelStyles(darkMode)}>
                                             Telefone *
                                         </Typography>
                                         <TextField
@@ -259,59 +167,12 @@ function Contact({darkMode}) {
                                             fullWidth
                                             placeholder="(16) 99999-9999"
                                             variant="outlined"
-                                            sx={{
-                                                '& .MuiOutlinedInput-root': {
-                                                    bgcolor: darkMode ? '#1f2937' : '#ffffff',
-                                                    color: darkMode ? '#ffffff' : '#111827',
-                                                    '& fieldset': {
-                                                        borderColor: darkMode ? '#4b5563' : '#d1d5db',
-                                                    },
-                                                    '&:hover fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                    '&.Mui-focused fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input': {
-                                                    '&:-webkit-autofill': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                        transition: 'background-color 5000s ease-in-out 0s',
-                                                    },
-                                                    '&:-webkit-autofill:hover': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                    '&:-webkit-autofill:focus': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                    '&:-webkit-autofill:active': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input::placeholder': {
-                                                    color: darkMode ? '#9ca3af' : '#6b7280',
-                                                    opacity: 1,
-                                                },
-                                            }}
+                                            sx={getFormFieldStyles(darkMode)}
                                         />
                                     </Box>
 
                                     <Box>
-                                        <Typography
-                                            component="label"
-                                            htmlFor="email"
-                                            sx={{
-                                                display: 'block',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 'medium',
-                                                mb: 1,
-                                                color: darkMode ? '#ffffff' : '#111827'
-                                            }}
-                                        >
+                                        <Typography component="label" htmlFor="email" sx={getFormLabelStyles(darkMode)}>
                                             E-mail *
                                         </Typography>
                                         <TextField
@@ -323,59 +184,12 @@ function Contact({darkMode}) {
                                             fullWidth
                                             placeholder="seu@email.com"
                                             variant="outlined"
-                                            sx={{
-                                                '& .MuiOutlinedInput-root': {
-                                                    bgcolor: darkMode ? '#1f2937' : '#ffffff',
-                                                    color: darkMode ? '#ffffff' : '#111827',
-                                                    '& fieldset': {
-                                                        borderColor: darkMode ? '#4b5563' : '#d1d5db',
-                                                    },
-                                                    '&:hover fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                    '&.Mui-focused fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input': {
-                                                    '&:-webkit-autofill': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                        transition: 'background-color 5000s ease-in-out 0s',
-                                                    },
-                                                    '&:-webkit-autofill:hover': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                    '&:-webkit-autofill:focus': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                    '&:-webkit-autofill:active': {
-                                                        WebkitBoxShadow: `0 0 0 1000px ${darkMode ? '#1f2937' : '#ffffff'} inset`,
-                                                        WebkitTextFillColor: darkMode ? '#ffffff' : '#111827',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input::placeholder': {
-                                                    color: darkMode ? '#9ca3af' : '#6b7280',
-                                                    opacity: 1,
-                                                },
-                                            }}
+                                            sx={getFormFieldStyles(darkMode)}
                                         />
                                     </Box>
 
                                     <Box>
-                                        <Typography
-                                            component="label"
-                                            htmlFor="service"
-                                            sx={{
-                                                display: 'block',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 'medium',
-                                                mb: 1,
-                                                color: darkMode ? '#ffffff' : '#111827'
-                                            }}
-                                        >
+                                        <Typography component="label" htmlFor="service" sx={getFormLabelStyles(darkMode)}>
                                             Serviço Desejado
                                         </Typography>
                                         <TextField
@@ -386,49 +200,18 @@ function Contact({darkMode}) {
                                             fullWidth
                                             variant="outlined"
                                             displayEmpty
-                                            sx={{
-                                                '& .MuiOutlinedInput-root': {
-                                                    bgcolor: darkMode ? '#1f2937' : '#ffffff',
-                                                    color: darkMode ? '#ffffff' : '#111827',
-                                                    '& fieldset': {
-                                                        borderColor: darkMode ? '#4b5563' : '#d1d5db',
-                                                    },
-                                                    '&:hover fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                    '&.Mui-focused fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                },
-                                                '& .MuiSelect-icon': {
-                                                    color: darkMode ? '#9ca3af' : '#6b7280',
-                                                },
-                                            }}
+                                            sx={getFormFieldStyles(darkMode)}
                                         >
-                                            <MenuItem value="">Selecione um serviço</MenuItem>
-                                            <MenuItem value="desinsetizacao">Desinsetização</MenuItem>
-                                            <MenuItem value="desratizacao">Desratização</MenuItem>
-                                            <MenuItem value="descupinizacao">Descupinização</MenuItem>
-                                            <MenuItem value="sanitizacao">Sanitização</MenuItem>
-                                            <MenuItem value="expurgo">Expurgo</MenuItem>
-                                            <MenuItem value="imunizacao">Imunização de Reservatórios</MenuItem>
-                                            <MenuItem value="preventivo">Controle Preventivo</MenuItem>
-                                            <MenuItem value="outros">Outros</MenuItem>
+                                            {SERVICE_OPTIONS.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
                                         </TextField>
                                     </Box>
 
                                     <Box>
-                                        <Typography
-                                            component="label"
-                                            htmlFor="message"
-                                            sx={{
-                                                display: 'block',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 'medium',
-                                                mb: 1,
-                                                color: darkMode ? '#ffffff' : '#111827'
-                                            }}
-                                        >
+                                        <Typography component="label" htmlFor="message" sx={getFormLabelStyles(darkMode)}>
                                             Mensagem
                                         </Typography>
                                         <TextField
@@ -440,25 +223,7 @@ function Contact({darkMode}) {
                                             fullWidth
                                             placeholder="Descreva sua necessidade ou dúvida..."
                                             variant="outlined"
-                                            sx={{
-                                                '& .MuiOutlinedInput-root': {
-                                                    bgcolor: darkMode ? '#1f2937' : '#ffffff',
-                                                    color: darkMode ? '#ffffff' : '#111827',
-                                                    '& fieldset': {
-                                                        borderColor: darkMode ? '#4b5563' : '#d1d5db',
-                                                    },
-                                                    '&:hover fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                    '&.Mui-focused fieldset': {
-                                                        borderColor: '#16a34a',
-                                                    },
-                                                },
-                                                '& .MuiInputBase-input::placeholder': {
-                                                    color: darkMode ? '#9ca3af' : '#6b7280',
-                                                    opacity: 1,
-                                                },
-                                            }}
+                                            sx={getFormFieldStyles(darkMode)}
                                         />
                                     </Box>
 
@@ -468,18 +233,10 @@ function Contact({darkMode}) {
                                         variant="contained"
                                         disabled={isSubmitting}
                                         sx={{
-                                            bgcolor: '#16a34a',
-                                            color: 'white',
+                                            ...getPrimaryButtonStyles(isSubmitting),
                                             py: 1.5,
                                             fontSize: '1.125rem',
                                             fontWeight: 'semibold',
-                                            textTransform: 'none',
-                                            '&:hover': {
-                                                bgcolor: '#15803d',
-                                            },
-                                            '&:disabled': {
-                                                bgcolor: '#9ca3af',
-                                            },
                                             mt: 1
                                         }}
                                     >
@@ -516,23 +273,23 @@ function Contact({darkMode}) {
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                                         <Phone size={20} style={{color: '#16a34a'}}/>
                                         <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                            (16) 99709-0444
+                                            {CONTACT_INFO.phone}
                                         </Typography>
                                     </Box>
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                                         <Mail size={20} style={{color: '#16a34a'}}/>
                                         <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                            edsoncontroledepragas@gmail.com
+                                            {CONTACT_INFO.email}
                                         </Typography>
                                     </Box>
                                     <Box sx={{display: 'flex', alignItems: 'flex-start', gap: 1.5}}>
                                         <MapPin size={20} style={{color: '#16a34a', marginTop: '2px'}}/>
                                         <Box>
                                             <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                                Av. Antonio Fernandes Pinto, 280
+                                                {CONTACT_INFO.address.street}
                                             </Typography>
                                             <Typography sx={{color: darkMode ? '#d1d5db' : '#374151'}}>
-                                                Jaboticabal, SP
+                                                {CONTACT_INFO.address.city}, {CONTACT_INFO.address.state}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -561,14 +318,14 @@ function Contact({darkMode}) {
                                     }}
                                 >
                                     <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.9!2d-48.31!3d-21.25!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDE1JzAwLjAiUyA0OMKwMTgnMzYuMCJX!5e0!3m2!1spt-BR!2sbr!4v1639000000000!5m2!1spt-BR!2sbr"
+                                        src={MAP_CONFIG.embedUrl}
                                         width="100%"
                                         height="100%"
                                         style={{border: 0}}
                                         allowFullScreen=""
                                         loading="lazy"
                                         referrerPolicy="no-referrer-when-downgrade"
-                                        title="Localização da Edson Controle de Pragas - Jaboticabal, SP"
+                                        title={MAP_CONFIG.title}
                                     />
                                 </Box>
                             </Box>
@@ -617,8 +374,8 @@ function Contact({darkMode}) {
                                     Houve um problema ao enviar o email. Por favor, tente novamente ou entre em contato
                                     diretamente:
                                     <br/><br/>
-                                    <strong>Telefone:</strong> (16) 99709-0444<br/>
-                                    <strong>Email:</strong> edsoncontroledepragas@gmail.com
+                                    <strong>Telefone:</strong> {CONTACT_INFO.phone}<br/>
+                                    <strong>Email:</strong> {CONTACT_INFO.email}
                                 </>
                             ) : (
                                 'Sua solicitação foi enviada por email com sucesso! Entraremos em contato em breve para fornecer seu orçamento personalizado.'

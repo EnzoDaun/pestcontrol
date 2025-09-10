@@ -5,6 +5,7 @@ import team from '../../assets/team.png';
 import eco from '../../assets/eco.png';
 import satisfaction from '../../assets/satisfaction.png';
 import approve from '../../assets/approve.png';
+import {getSectionTitleStyles} from '../utils/styles.js';
 
 function Carousel({currentSlide, setCurrentSlide, darkMode}) {
     const slides = [
@@ -52,15 +53,7 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
         }}>
             <Container maxWidth="xl">
                 <Box sx={{textAlign: 'center', mb: 8}}>
-                    <Typography
-                        variant="h2"
-                        sx={{
-                            fontWeight: 'bold',
-                            mb: 2,
-                            fontSize: {xs: '2rem', md: '2.5rem'},
-                            color: darkMode ? '#ffffff' : '#111827'
-                        }}
-                    >
+                    <Typography variant="h2" sx={getSectionTitleStyles(darkMode)}>
                         Por Que Confiar na Edson?
                     </Typography>
                 </Box>

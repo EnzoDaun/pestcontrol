@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Grid, Card, CardContent, Typography, Box, Avatar} from '@mui/material';
 import {Star} from 'lucide-react';
+import {getSectionTitleStyles, getSectionSubtitleStyles} from '../utils/styles.js';
 
 function Testimonials({darkMode}) {
     const testimonials = [
@@ -35,24 +36,10 @@ function Testimonials({darkMode}) {
         }}>
             <Container maxWidth="xl">
                 <Box sx={{textAlign: 'center', mb: 8}}>
-                    <Typography
-                        variant="h2"
-                        sx={{
-                            fontWeight: 'bold',
-                            mb: 2,
-                            fontSize: {xs: '2rem', md: '2.5rem'},
-                            color: darkMode ? '#ffffff' : '#111827'
-                        }}
-                    >
+                    <Typography variant="h2" sx={getSectionTitleStyles(darkMode)}>
                         O Que Nossos Clientes Dizem
                     </Typography>
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            color: darkMode ? '#d1d5db' : '#6b7280',
-                            fontSize: {xs: '1rem', md: '1.125rem'}
-                        }}
-                    >
+                    <Typography variant="h6" sx={getSectionSubtitleStyles(darkMode)}>
                         Depoimentos reais de clientes satisfeitos com nossos serviços.
                     </Typography>
                 </Box>

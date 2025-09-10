@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Grid, Card, CardContent, Typography, Box} from '@mui/material';
 import {Shield, Bug, Droplets, Zap, Home, Leaf, Eye, Waves} from 'lucide-react';
+import { getSectionTitleStyles, getSectionSubtitleStyles, getServiceCardStyles } from '../utils/styles.js';
 
 function Services({darkMode}) {
     const services = [
@@ -53,26 +54,14 @@ function Services({darkMode}) {
         }}>
             <Container maxWidth="xl">
                 <Box sx={{textAlign: 'center', mb: 8}}>
-                    <Typography
-                        variant="h2"
-                        sx={{
-                            fontWeight: 'bold',
-                            mb: 2,
-                            fontSize: {xs: '2rem', md: '2.5rem'},
-                            color: darkMode ? '#ffffff' : '#111827'
-                        }}
-                    >
+                    <Typography variant="h2" sx={getSectionTitleStyles(darkMode)}>
                         Nossos Serviços
                     </Typography>
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            color: darkMode ? '#d1d5db' : '#6b7280',
-                            maxWidth: '32rem',
-                            mx: 'auto',
-                            fontSize: {xs: '1rem', md: '1.125rem'}
-                        }}
-                    >
+                    <Typography variant="h6" sx={{
+                        ...getSectionSubtitleStyles(darkMode),
+                        maxWidth: '32rem',
+                        mx: 'auto'
+                    }}>
                         Oferecemos soluções completas para todos os tipos de pragas, sempre com segurança e eficiência.
                     </Typography>
                 </Box>
@@ -80,26 +69,7 @@ function Services({darkMode}) {
                 <Grid container spacing={3} justifyContent="center">
                     {services.map((service, index) => (
                         <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
-                            <Card
-                                sx={{
-                                    width: '100%',
-                                    minWidth: 240,
-                                    maxWidth: 300,
-                                    transition: 'all 0.3s ease',
-                                    bgcolor: darkMode ? '#374151' : '#ffffff',
-                                    color: darkMode ? '#ffffff' : '#111827',
-                                    border: darkMode ? '1px solid #4b5563' : '1px solid #e5e7eb',
-                                    boxShadow: darkMode ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    '&:hover': {
-                                        transform: 'translateY(-4px)',
-                                        boxShadow: darkMode
-                                            ? '0 10px 25px -3px rgba(0, 0, 0, 0.3)'
-                                            : '0 10px 25px -3px rgba(0, 0, 0, 0.1)',
-                                    }
-                                }}
-                            >
+                            <Card sx={getServiceCardStyles(darkMode)}>
                                 <CardContent sx={{
                                     p: 3,
                                     textAlign: 'center',

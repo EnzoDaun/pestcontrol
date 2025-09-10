@@ -1,11 +1,13 @@
 import React from 'react';
 import {Box, Container, Grid, Typography} from '@mui/material';
 import {Bug} from 'lucide-react';
+import {createWhatsAppUrl} from '../utils/formatters.js';
+import {CONTACT_INFO, SERVICES_LIST, DEFAULT_WHATSAPP_MESSAGE} from '../constants/data.js';
 
 function Footer() {
     const handleWhatsAppClick = () => {
-        const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para controle de pragas.');
-        window.open(`https://wa.me/5516997090444?text=${message}`, '_blank');
+        const url = createWhatsAppUrl(CONTACT_INFO.whatsappNumber, DEFAULT_WHATSAPP_MESSAGE);
+        window.open(url, '_blank');
     };
 
     return (
@@ -32,7 +34,7 @@ function Footer() {
                         <Box sx={{display: 'flex', gap: 2}}>
                             <Typography
                                 component="a"
-                                href="https://www.facebook.com/edson.cesarpires?locale=pt_BR"
+                                href={CONTACT_INFO.socialMedia.facebook}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 sx={{
@@ -46,7 +48,7 @@ function Footer() {
                             </Typography>
                             <Typography
                                 component="a"
-                                href="https://www.instagram.com/edsoncpires?utm_source=ig_web_button_share_sheet&igsh=MXRoZmd5NDVoaWZsZw=="
+                                href={CONTACT_INFO.socialMedia.instagram}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 sx={{
@@ -78,11 +80,9 @@ function Footer() {
                             Serviços
                         </Typography>
                         <Box sx={{'& > div': {mb: 1}}}>
-                            <Typography sx={{color: '#d1d5db'}}>Desinsetização</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>Desratização</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>Descupinização</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>Sanitização</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>Controle Preventivo</Typography>
+                            {SERVICES_LIST.map((service, index) => (
+                                <Typography key={index} sx={{color: '#d1d5db'}}>{service}</Typography>
+                            ))}
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -90,12 +90,13 @@ function Footer() {
                             Contato
                         </Typography>
                         <Box sx={{'& > div': {mb: 1}}}>
-                            <Typography sx={{color: '#d1d5db'}}>Av. Antonio Fernandes Pinto, 280</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>Bairro Xis - Jaboticabal, SP</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>CEP 14870-807</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>(16) 99709-0444</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>edsoncontroledepragas@gmail.com</Typography>
-                            <Typography sx={{color: '#d1d5db'}}>CNPJ: 59.224.809/0001-40</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>{CONTACT_INFO.address.street}</Typography>
+                            <Typography
+                                sx={{color: '#d1d5db'}}>{CONTACT_INFO.address.neighborhood} - {CONTACT_INFO.address.city}, {CONTACT_INFO.address.state}</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>CEP {CONTACT_INFO.address.zipCode}</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>{CONTACT_INFO.phone}</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>{CONTACT_INFO.email}</Typography>
+                            <Typography sx={{color: '#d1d5db'}}>CNPJ: {CONTACT_INFO.cnpj}</Typography>
                         </Box>
                     </Grid>
                 </Grid>

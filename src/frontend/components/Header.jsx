@@ -1,11 +1,14 @@
 import React from 'react';
 import {AppBar, Toolbar, Container, Box, Typography, Button} from '@mui/material';
 import {Bug, Moon, Sun, MessageCircle} from 'lucide-react';
+import {createWhatsAppUrl} from '../utils/formatters.js';
+import {CONTACT_INFO, DEFAULT_WHATSAPP_MESSAGE} from '../constants/data.js';
+import {getWhatsAppButtonStyles} from '../utils/styles.js';
 
 function Header({darkMode, toggleTheme}) {
     const handleWhatsAppClick = () => {
-        const message = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para controle de pragas.');
-        window.open(`https://wa.me/5516997090444?text=${message}`, '_blank');
+        const url = createWhatsAppUrl(CONTACT_INFO.whatsappNumber, DEFAULT_WHATSAPP_MESSAGE);
+        window.open(url, '_blank');
     };
 
     return (
@@ -39,26 +42,10 @@ function Header({darkMode, toggleTheme}) {
                             onClick={handleWhatsAppClick}
                             variant="contained"
                             size="small"
-                            sx={{
-                                bgcolor: '#25d366',
-                                color: 'white',
-                                '&:hover': {bgcolor: '#128c7e'},
-                                textTransform: 'none',
-                                borderRadius: '20px',
-                                px: {xs: 0, sm: 2},
-                                fontSize: {xs: '0.5rem', sm: '0.875rem'},
-                                minWidth:{xs: '32px', sm: 'auto'},
-                                height: {xs: '32px', sm: 'auto'},
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                '& .MuiButton-startIcon': {
-                                    margin: {xs: 0, sm: '0 4px 0 0'}
-                                }
-                            }}
+                            sx={getWhatsAppButtonStyles('small')}
                             startIcon={<MessageCircle size={16}/>}
                         >
-                            <Box sx={{display: {xs: 'none', sm: 'block'} }}>WhatsApp</Box>
+                            <Box sx={{display: {xs: 'none', sm: 'block'}}}>WhatsApp</Box>
                         </Button>
                         <Button
                             onClick={toggleTheme}

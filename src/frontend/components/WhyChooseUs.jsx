@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import { Clock, FileText, Shield } from 'lucide-react';
+import { getSectionTitleStyles, getSectionSubtitleStyles } from '../utils/styles.js';
 
 function WhyChooseUs({ darkMode }) {
   const features = [
@@ -29,26 +30,14 @@ function WhyChooseUs({ darkMode }) {
     }}>
       <Container maxWidth="xl">
         <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: 'bold',
-              mb: 2,
-              fontSize: { xs: '2rem', md: '2.5rem' },
-              color: darkMode ? '#ffffff' : '#111827'
-            }}
-          >
+          <Typography variant="h2" sx={getSectionTitleStyles(darkMode)}>
             Por Que Escolher a Edson?
           </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              color: darkMode ? '#d1d5db' : '#6b7280',
-              maxWidth: '32rem',
-              mx: 'auto',
-              fontSize: { xs: '1rem', md: '1.125rem' }
-            }}
-          >
+          <Typography variant="h6" sx={{
+            ...getSectionSubtitleStyles(darkMode),
+            maxWidth: '32rem',
+            mx: 'auto'
+          }}>
             Nosso compromisso é oferecer o melhor serviço com total transparência e confiabilidade.
           </Typography>
         </Box>
