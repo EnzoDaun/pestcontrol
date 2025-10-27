@@ -1,47 +1,54 @@
 import React from 'react';
 import {Container, Grid, Card, CardContent, Typography, Box} from '@mui/material';
-import {Shield, Bug, Droplets, Zap, Home, Leaf, Eye, Waves} from 'lucide-react';
 import { getSectionTitleStyles, getSectionSubtitleStyles, getServiceCardStyles } from '../utils/styles.js';
+import manejoImg from '../../assets/manejo.png';
+import desinsetizacaoImg from '../../assets/desinsetizacao.png';
+import sanitizacaoImg from '../../assets/sanitizacao.png';
+import ratoImg from '../../assets/rato.png';
+import cupimImg from '../../assets/cupim.png';
+import expurgoImg from '../../assets/expurgo.png';
+import aguaImg from '../../assets/agua.png';
+import controleImg from '../../assets/controle.png';
 
 function Services({darkMode}) {
     const services = [
         {
-            icon: <Shield size={32}/>,
+            icon: <img src={manejoImg} alt="Manejo Integrado" style={{width: 44, height: 44}} />,
             title: "Manejo Integrado de Pragas",
             description: "Estratégia completa e sustentável para controle eficaz de pragas.",
         },
         {
-            icon: <Bug size={32}/>,
+            icon: <img src={desinsetizacaoImg} alt="Desinsetização" style={{width: 44, height: 44}} />,
             title: "Desinsetização",
             description: "Eliminação segura de insetos com produtos certificados.",
         },
         {
-            icon: <Droplets size={32}/>,
+            icon: <img src={sanitizacaoImg} alt="Sanitização" style={{width: 44, height: 44}} />,
             title: "Sanitização",
             description: "Desinfecção completa de ambientes para sua proteção.",
         },
         {
-            icon: <Zap size={32}/>,
+            icon: <img src={ratoImg} alt="Desratização" style={{width: 44, height: 44}} />,
             title: "Desratização",
             description: "Controle eficiente de roedores com métodos seguros.",
         },
         {
-            icon: <Home size={32}/>,
+            icon: <img src={cupimImg} alt="Descupinização" style={{width: 44, height: 44}} />,
             title: "Descupinização",
             description: "Proteção estrutural contra cupins e térmitas.",
         },
         {
-            icon: <Leaf size={32}/>,
+            icon: <img src={expurgoImg} alt="Expurgo" style={{width: 44, height: 44}} />,
             title: "Expurgo",
             description: "Fumigação especializada para eliminação total de pragas.",
         },
         {
-            icon: <Waves size={32}/>,
+            icon: <img src={aguaImg} alt="Imunização de Reservatórios" style={{width: 44, height: 44}} />,
             title: "Imunização de Reservatórios",
             description: "Tratamento preventivo para caixas d'água e reservatórios.",
         },
         {
-            icon: <Eye size={32}/>,
+            icon: <img src={controleImg} alt="Controle Preventivo" style={{width: 44, height: 44}} />,
             title: "Controle Preventivo",
             description: "Monitoramento contínuo para prevenir infestações.",
         },
@@ -80,7 +87,7 @@ function Services({darkMode}) {
                                 }}>
                                     <Box sx={{
                                         color: darkMode ? '#4ade80' : '#16a34a',
-                                        mb: 2,
+                                        mb: 0,
                                         display: 'flex',
                                         justifyContent: 'center'
                                     }}>
@@ -90,7 +97,8 @@ function Services({darkMode}) {
                                         variant="h6"
                                         sx={{
                                             fontWeight: 'semibold',
-                                            mb: 2,
+                                            mb: 0,
+                                            mt: 2,
                                             fontSize: '1.1rem',
                                             color: darkMode ? '#ffffff' : '#111827',
                                             lineHeight: 1.3,
@@ -110,7 +118,8 @@ function Services({darkMode}) {
                                             fontSize: '0.875rem',
                                             flexGrow: 1,
                                             display: 'flex',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            mt: 1
                                         }}
                                     >
                                         {service.description}

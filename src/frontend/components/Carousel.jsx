@@ -4,7 +4,7 @@ import {ChevronLeft, ChevronRight} from 'lucide-react';
 import team from '../../assets/team.png';
 import eco from '../../assets/eco.png';
 import satisfaction from '../../assets/satisfaction.png';
-import approve from '../../assets/approve.png';
+// import approve from '../../assets/approve.png';
 import {getSectionTitleStyles} from '../utils/styles.js';
 
 function Carousel({currentSlide, setCurrentSlide, darkMode}) {
@@ -21,14 +21,14 @@ function Carousel({currentSlide, setCurrentSlide, darkMode}) {
         },
         {
             title: "Garantia de Satisfação",
-            description: "Garantimos a eficácia do serviço ou realizamos nova aplicação sem custo adicional.",
+            description: "Garantimos a eficácia do serviço",
             image: satisfaction,
         },
-        {
-            title: "Depoimentos de Clientes",
-            description: "Mais de 1000 clientes satisfeitos com avaliação 5 estrelas em nossos serviços.",
-            image: approve,
-        },
+        // {
+        //     title: "Depoimentos de Clientes",
+        //     description: "Mais de 1000 clientes satisfeitos com avaliação 5 estrelas em nossos serviços.",
+        //     image: approve,
+        // },
     ];
 
     useEffect(() => {

@@ -9,8 +9,8 @@ import {
 import Header from './Header';
 import Hero from './Hero';
 import Services from './Services';
+import WhoWeAre from './WhoWeAre';
 import WhyChooseUs from './WhyChooseUs';
-import Testimonials from './Testimonials';
 import Contact from './Contact';
 import Footer from './Footer';
 
@@ -70,6 +70,7 @@ export default function EdsonPestControl() {
                 <Header darkMode={darkMode} toggleTheme={toggleTheme}/>
                 <Hero scrollToContact={scrollToContact}/>
                 <Services darkMode={darkMode}/>
+                <WhoWeAre darkMode={darkMode}/>
                 <Carousel currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} darkMode={darkMode}/>
                 <WhyChooseUs darkMode={darkMode}/>
                 {/*<Testimonials darkMode={darkMode}/>*/}

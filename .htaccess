@@ -1,82 +1,27 @@
+# Configuração para SPA React
 RewriteEngine On
-
-AddType application/javascript .js
-AddType application/javascript .mjs
-AddType text/css .css
-AddType application/json .json
-AddType image/svg+xml .svg
-
-<IfModule mod_headers.c>
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options DENY
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.emailjs.com"
-
-    <FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-        Header set Expires "1 year"
-    </FilesMatch>
-
-    <FilesMatch "\.html$">
-        Header set Cache-Control "public, max-age=3600, must-revalidate"
-    </FilesMatch>
-
-    Header unset Server
-    Header unset X-Powered-By
-</IfModule>
-
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/\.well-known/.*
-RewriteCond %{REQUEST_URI} !^/(api|admin)/.*
 RewriteRule . /index.html [L]
 
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE application/json
-</IfModule>
+# Headers de segurança
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options SAMEORIGIN
+Header always set X-XSS-Protection "1; mode=block"
 
-<IfModule mod_rewrite.c>
-    RewriteCond %{HTTP_REFERER} !^$
-    RewriteCond %{HTTP_REFERER} !^https://(www\.)?seudominio\.com [NC]
-    RewriteRule \.(jpg|jpeg|png|gif|svg)$ - [F,L]
-</IfModule>
+# Content Security Policy para permitir Google Maps
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.google.com https://maps.google.com;"
 
-<Files ~ "^\.">
-    Order allow,deny
-    Deny from all
-</Files>
-
-<FilesMatch "\.(env|git|svn|htpasswd|htaccess|ini|log|sh|inc|bak|config)$">
-    Order allow,deny
-    Deny from all
+# Cache para assets estáticos
+<FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$">
+    ExpiresActive On
+    ExpiresDefault "access plus 1 year"
+    Header append Cache-Control "public, immutable"
 </FilesMatch>
 
-<IfModule mod_evasive24.c>
-    DOSHashTableSize    2048
-    DOSPageCount        10
-    DOSPageInterval     1
-    DOSSiteCount        50
-    DOSSiteInterval     1
-    DOSBlockingPeriod   600
-</IfModule>
-
-DirectoryIndex index.html
-
-Options -Indexes
-
-<IfModule mod_rewrite.c>
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
+# MIME types
+AddType application/javascript .js .mjs
+AddType text/css .css
+AddType image/svg+xml .svg
+AddType font/woff .woff
+AddType font/woff2 .woff2

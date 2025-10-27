@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Typography, Box } from '@mui/material';
-import { Clock, FileText, Shield } from 'lucide-react';
+import { Clock, Shield } from 'lucide-react';
 import { getSectionTitleStyles, getSectionSubtitleStyles } from '../utils/styles.js';
+import cifraoImg from '../../assets/cifrao.png';
 
 function WhyChooseUs({ darkMode }) {
   const features = [
@@ -11,7 +12,7 @@ function WhyChooseUs({ darkMode }) {
       description: "Emergências não esperam. Estamos disponíveis 24 horas por dia para atender suas necessidades.",
     },
     {
-      icon: <FileText size={48} />,
+      icon: <img src={cifraoImg} alt="Preços Transparentes" style={{width: 48, height: 48}} />,
       title: "Preços Transparentes",
       description: "Orçamentos claros e detalhados, sem surpresas ou custos ocultos no final do serviço.",
     },
